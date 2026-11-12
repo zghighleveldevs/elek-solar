@@ -241,6 +241,61 @@
     run();
   }
 
+
+  /* ---------- Premium layer ---------- */
+  // scroll progress + back-to-top + mobile action bar
+  const prog = $('.progress'), top = $('.totop'), mbar = $('.mbar');
+  const onS = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    if (prog) prog.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+    top && top.classList.toggle('show', scrollY > innerHeight * 1.2);
+    mbar && mbar.classList.toggle('show', scrollY > innerHeight * .6);
+  };
+  addEventListener('scroll', onS, { passive: true }); onS();
+  top && top.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+
+  // word-by-word heading reveal
+  $$('.sec-head h2, .wr-auto').forEach(h => {
+    if (h.querySelector('.w')) return;
+    h.classList.add('wr');
+    h.innerHTML = h.innerHTML.split(/(\s+)/).map(t => /^\s+$/.test(t) || !t ? t : `<span class="w"><span>${t}</span></span>`).join('');
+    $$('.w>span', h).forEach((s, i) => s.style.transitionDelay = (i * 0.06) + 's');
+  });
+  const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: .2 });
+  $$('.wr, .wipe').forEach(el => io2.observe(el));
+
+  // testimonial slider
+  $$('.tslider').forEach(sl => {
+    const slides = $$('.tslide', sl), bar = $('.tbar i', sl), cnt = $('.tcount', sl); let i = 0, t;
+    const show = (n) => {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('on', k === i));
+      if (cnt) cnt.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+      if (bar) { bar.classList.remove('run'); void bar.offsetWidth; if (!reduced) bar.classList.add('run'); }
+      clearTimeout(t); if (!reduced) t = setTimeout(() => show(i + 1), 7000);
+    };
+    $('[data-tprev]', sl)?.addEventListener('click', () => show(i - 1));
+    $('[data-tnext]', sl)?.addEventListener('click', () => show(i + 1));
+    show(0);
+  });
+
+  // home savings estimator
+  const est = $('#est');
+  if (est) {
+    const r = $('#est-r', est), money = v => '$' + Math.round(v).toLocaleString('en-US');
+    const anim = (el, to) => { const from = +(el.dataset.v || 0); el.dataset.v = to; const t0 = performance.now();
+      const st = now => { const p = Math.min(1, (now - t0) / 500), v = from + (to - from) * (1 - Math.pow(1 - p, 3)); el.textContent = el.dataset.fmt === 'kw' ? v.toFixed(1) + ' kW' : money(v); if (p < 1) requestAnimationFrame(st); };
+      requestAnimationFrame(st); };
+    const run = () => {
+      const bill = +r.value; r.style.setProperty('--fill', ((bill - r.min) / (r.max - r.min) * 100) + '%');
+      $('#est-bill', est).textContent = '$' + bill + '/mo';
+      const rate = .15, kwhYr = bill / rate * 12, kw = kwhYr / (5 * 365 * .8), cost = kw * 1000 * 2.85;
+      let tot = 0; for (let y = 0; y < 25; y++) tot += kwhYr * rate * Math.pow(1.03, y) * Math.pow(.995, y);
+      anim($('#est-sys', est), kw); anim($('#est-yr', est), bill * 12); anim($('#est-25', est), tot - cost); anim($('#est-util', est), tot);
+    };
+    r.addEventListener('input', run); run();
+  }
+
   /* Footer year */
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
 })();
