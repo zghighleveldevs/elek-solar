@@ -93,7 +93,8 @@ svg.i{width:1em;height:1em;flex:none}
 .hero__bg img{width:100%;height:100%;object-fit:cover}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1}
 .hero--home{min-height:780px;display:flex;align-items:center}
-.hero--home::before{background:linear-gradient(90deg,rgba(0,70,140,.92) 0%,rgba(0,90,170,.72) 38%,rgba(0,90,170,.15) 75%,rgba(0,0,0,0) 100%)}
+.hero--home::before{background:linear-gradient(90deg,rgba(0,60,120,.7) 0%,rgba(0,80,155,.45) 35%,rgba(0,80,155,.1) 62%,rgba(0,0,0,0) 80%)}
+.hero--home .hero__content{text-shadow:0 1px 18px rgba(0,25,60,.45)}
 .hero--home .container{padding:150px 0 140px}
 .hero--home .hero__content{max-width:620px}
 .hero h6{color:#fff;margin-bottom:22px;font-size:14px}
