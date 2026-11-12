@@ -1,6 +1,6 @@
 # Elek Solar — website
 
-Custom-designed static site for [eleksolar.com](https://eleksolar.com): editorial layout, Elek brand colors and real project photography, keeping the original copy and URLs.
+Static rebuild of [eleksolar.com](https://eleksolar.com), styled to match the original WordPress site (same layout, fonts, colors, photos and copy), without the WordPress overhead.
 
 ## Structure
 

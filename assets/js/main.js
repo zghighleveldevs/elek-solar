@@ -255,26 +255,11 @@
   top && top.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
 
   // word-by-word heading reveal
-  $$('.wr-auto').forEach(h => {
+  $$('.sec-head h2, .wr-auto').forEach(h => {
     if (h.querySelector('.w')) return;
     h.classList.add('wr');
-    let k = 0;
-    const walk = node => {
-      [...node.childNodes].forEach(n => {
-        if (n.nodeType === 3) {
-          const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(t => {
-            if (!t) return;
-            if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(t)); return; }
-            const w = document.createElement('span'); w.className = 'w';
-            const s = document.createElement('span'); s.textContent = t; s.style.transitionDelay = (k++ * 0.06) + 's';
-            w.appendChild(s); frag.appendChild(w);
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1 && !n.matches('svg')) walk(n);
-      });
-    };
-    walk(h);
+    h.innerHTML = h.innerHTML.split(/(\s+)/).map(t => /^\s+$/.test(t) || !t ? t : `<span class="w"><span>${t}</span></span>`).join('');
+    $$('.w>span', h).forEach((s, i) => s.style.transitionDelay = (i * 0.06) + 's');
   });
   const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: .2 });
   $$('.wr, .wipe').forEach(el => io2.observe(el));
@@ -309,19 +294,6 @@
       anim($('#est-sys', est), kw); anim($('#est-yr', est), bill * 12); anim($('#est-25', est), tot - cost); anim($('#est-util', est), tot);
     };
     r.addEventListener('input', run); run();
-  }
-
-  // services list: photo follows the cursor
-  const hl = $('.slist');
-  if (hl && matchMedia('(hover:hover) and (min-width:901px)').matches) {
-    const box = document.createElement('div'); box.className = 'hover-img'; box.innerHTML = '<img alt="">'; document.body.appendChild(box);
-    const im = box.firstChild; let x = 0, y = 0, cx = 0, cy = 0, raf;
-    const loop = () => { cx += (x - cx) * .14; cy += (y - cy) * .14; box.style.left = cx + 'px'; box.style.top = cy + 'px'; raf = requestAnimationFrame(loop); };
-    $$('a', hl).forEach(a => {
-      a.addEventListener('mouseenter', e => { im.src = a.dataset.img; x = cx = e.clientX; y = cy = e.clientY; box.classList.add('on'); cancelAnimationFrame(raf); loop(); });
-      a.addEventListener('mousemove', e => { x = e.clientX + 60; y = e.clientY; });
-      a.addEventListener('mouseleave', () => { box.classList.remove('on'); setTimeout(() => cancelAnimationFrame(raf), 400); });
-    });
   }
 
   /* Footer year */
