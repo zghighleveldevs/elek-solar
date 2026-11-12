@@ -26,6 +26,8 @@ assets/img/                    Logo, badges and photos from the original site
 
 No build step: deploy the repo root as a static site (Vercel framework preset: **Other**).
 
+`vercel.json` serves clean URLs with a trailing slash (`/about-us/`), matching the old WordPress URLs so existing Google rankings and backlinks keep working when the domain is pointed here. `sitemap.xml`, `robots.txt`, a custom `404.html`, canonical tags and LocalBusiness / FAQ structured data are included.
+
 ## Before launch
 
 - **Forms** validate and show a thank-you state but don't send anywhere yet. Add `data-endpoint="https://…"` to each `<form data-form>` (e.g. Formspree, a CRM webhook) and `main.js` will POST the form data there.
