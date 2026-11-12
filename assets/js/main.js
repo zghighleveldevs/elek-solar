@@ -135,6 +135,10 @@
       if (!bad && f.type === 'tel' && f.value) bad = f.value.replace(/\D/g, '').length < 10;
       wrap.classList.toggle('invalid', bad); if (bad) ok = false;
     });
+    const radios = $$('input[type=radio][required]', scope);
+    if (radios.length && !radios.some(r => r.checked)) {
+      ok = false; const q = scope.querySelector('.q'); if (q) { q.style.color = '#d93025'; setTimeout(() => q.style.color = '', 2000); }
+    }
     return ok;
   };
   $$('form[data-form]').forEach(form => {

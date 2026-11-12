@@ -1,0 +1,32 @@
+# Elek Solar — website
+
+Static rebuild of [eleksolar.com](https://eleksolar.com), styled to match the original WordPress site (same layout, fonts, colors, photos and copy), without the WordPress overhead.
+
+## Structure
+
+```
+index.html                     Home
+about-us.html                  About Us
+solar-faqs.html                Solar FAQs
+solar-panel-cost-calculator.html
+blog.html                      Blog (cards link to existing posts on eleksolar.com)
+services.html                  Services
+solar-energy-for-homes.html    Residential Solar
+solar-power-for-businesses.html Commercial Solar
+roofing-services.html          Roofing
+our-solar-locations.html       Locations
+solar-installation-company-in-{florida,georgia,south-carolina}.html
+contact.html
+determine-your-savings.html    Free estimate form
+privacy-policy.html
+assets/css/style.css
+assets/js/main.js              Menu, forms, FAQ search, blog filter, calculator
+assets/img/                    Logo, badges and photos from the original site
+```
+
+No build step: deploy the repo root as a static site (Vercel framework preset: **Other**).
+
+## Before launch
+
+- **Forms** validate and show a thank-you state but don't send anywhere yet. Add `data-endpoint="https://…"` to each `<form data-form>` (e.g. Formspree, a CRM webhook) and `main.js` will POST the form data there.
+- **Blog** cards link to the full posts on the current WordPress site; migrate the posts before switching DNS.
