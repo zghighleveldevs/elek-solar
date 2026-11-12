@@ -16,17 +16,17 @@
   --dark:#000422;
   --yellow:#fdb813;
   --container:1140px;
-  --head:"Work Sans",system-ui,sans-serif;
-  --body:"Roboto",system-ui,sans-serif;
+  --head:"Plus Jakarta Sans",system-ui,sans-serif;
+  --body:"DM Sans",system-ui,sans-serif;
   --shadow:0 20px 50px -20px rgba(0,30,60,.18);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:var(--body);font-size:16px;line-height:1.85;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+body{margin:0;font-family:var(--body);font-size:16.5px;line-height:1.8;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
-h1,h2,h3,h4,h5,h6{font-family:var(--head);font-weight:600;line-height:1.3;margin:0 0 .5em;text-transform:capitalize;color:var(--ink)}
+h1,h2,h3,h4,h5,h6{font-family:var(--head);font-weight:700;letter-spacing:-.02em;line-height:1.3;margin:0 0 .5em;text-transform:capitalize;color:var(--ink)}
 h1{font-size:64px;line-height:1.4}
 h2{font-size:48px;line-height:1.3}
 h3{font-size:32px}
@@ -407,3 +407,25 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   .stat .n{font-size:44px}
   .svc-banner{height:340px}.svc-banner h2{font-size:32px}
 }
+
+/* ---------- Floating particles (like the original Elementor hero) ---------- */
+canvas.particles{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.cta canvas.particles{z-index:0}
+.hero h1{font-weight:800;letter-spacing:-.03em}
+.testi-hero blockquote{font-weight:700;letter-spacing:-.015em}
+.stat .n{font-weight:800;letter-spacing:-.03em}
+
+/* ---------- Gentle entrance animations ---------- */
+.js .fx,.js .fx-stagger>*{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .fx.in,.js .fx-stagger.in>*{opacity:1;transform:none}
+.js .fx-stagger.in>*:nth-child(2){transition-delay:.1s}.js .fx-stagger.in>*:nth-child(3){transition-delay:.2s}
+.js .fx-stagger.in>*:nth-child(4){transition-delay:.3s}.js .fx-stagger.in>*:nth-child(5){transition-delay:.4s}
+.js .fx-stagger.in>*:nth-child(6){transition-delay:.5s}
+.js .fx-hero>*{opacity:0;transform:translateY(24px);animation:heroIn .9s cubic-bezier(.2,.7,.2,1) forwards}
+.js .fx-hero>*:nth-child(2){animation-delay:.12s}.js .fx-hero>*:nth-child(3){animation-delay:.24s}
+.js .fx-hero>*:nth-child(4){animation-delay:.36s}.js .fx-hero>*:nth-child(5){animation-delay:.48s}
+@keyframes heroIn{to{opacity:1;transform:none}}
+.form-card--lift .form-card{animation:heroIn 1s .5s cubic-bezier(.2,.7,.2,1) both}
+.fcard,.post,.loc-card,.quote{transition:transform .35s ease,box-shadow .35s ease}
+.fcard:hover,.post:hover,.loc-card:hover,.quote:hover{transform:translateY(-6px);box-shadow:0 30px 50px -25px rgba(0,30,60,.3)}
+@media (prefers-reduced-motion:reduce){.js .fx,.js .fx-stagger>*,.js .fx-hero>*{opacity:1!important;transform:none!important;animation:none!important}canvas.particles{display:none}}

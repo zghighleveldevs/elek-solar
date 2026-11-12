@@ -1,5 +1,6 @@
 /* ELEK SOLAR — site interactions */
 (() => {
+  document.documentElement.classList.add('js');
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,7 +18,33 @@
 
   /* Reveal on scroll */
   const io = new IntersectionObserver((ents) => ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
-  $$('.reveal,.reveal-3d,.stat').forEach(el => io.observe(el));
+  $$('.reveal,.reveal-3d,.stat,.fx,.fx-stagger').forEach(el => io.observe(el));
+
+  /* Floating particles (particles.js-style) */
+  $$('canvas.particles').forEach(cv => {
+    if (reduced) return;
+    const host = cv.parentElement, g = cv.getContext('2d');
+    let W, H, d, dots = [];
+    const base = +(cv.dataset.dots || 0);
+    const size = () => {
+      d = Math.min(devicePixelRatio || 1, 2); W = cv.width = host.clientWidth * d; H = cv.height = host.clientHeight * d;
+      const n = base || Math.round(Math.min(110, host.clientWidth * host.clientHeight / 11000));
+      dots = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, r: (Math.random() * 2.6 + .8) * d,
+        vx: (Math.random() - .5) * .35 * d, vy: (Math.random() - .5) * .35 * d, o: Math.random() * .5 + .25, t: Math.random() * 6 }));
+    };
+    size(); addEventListener('resize', size);
+    let vis = true; new IntersectionObserver(([e]) => vis = e.isIntersecting).observe(host);
+    const tick = () => {
+      requestAnimationFrame(tick); if (!vis || document.hidden) return;
+      g.clearRect(0, 0, W, H);
+      for (const p of dots) {
+        p.x += p.vx; p.y += p.vy; p.t += .015;
+        if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10; if (p.y < -10) p.y = H + 10; if (p.y > H + 10) p.y = -10;
+        g.beginPath(); g.fillStyle = `rgba(255,255,255,${(p.o + Math.sin(p.t) * .15).toFixed(3)})`; g.arc(p.x, p.y, p.r, 0, 7); g.fill();
+      }
+    };
+    tick();
+  });
 
   /* Counters */
   const cio = new IntersectionObserver((ents) => ents.forEach(e => {
