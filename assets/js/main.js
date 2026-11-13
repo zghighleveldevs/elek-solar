@@ -331,25 +331,6 @@
     addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); upd();
   }
 
-  // magnetic buttons (desktop only)
-  if (!reduced && matchMedia('(hover:hover) and (pointer:fine)').matches) {
-    $$('.btn').forEach(b => {
-      b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px,${(e.clientY - r.top - r.height / 2) * .28}px)`; });
-      b.addEventListener('pointerleave', () => b.style.transform = '');
-    });
-  }
-
-  // hero quick-start chips: preselect the service in the lead form
-  $$('[data-pick]').forEach(a => a.addEventListener('click', e => {
-    const form = $('#lead'); if (!form) return;
-    e.preventDefault();
-    const r = form.querySelector(`input[type=radio][value="${a.dataset.pick}"]`); if (r) r.checked = true;
-    const first = form.querySelector('.fstep'); const next = first && first.querySelector('[data-next-step]');
-    if (first && first.classList.contains('on') && next) next.click();
-    form.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
-    setTimeout(() => form.querySelector('.fstep.on input, .fstep.on select')?.focus({ preventScroll: true }), 700);
-  }));
-
   /* Footer year */
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
 })();
