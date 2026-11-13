@@ -165,6 +165,7 @@
     const radios = $$('input[type=radio][required]', scope);
     if (radios.length && !radios.some(r => r.checked)) {
       ok = false; const q = scope.querySelector('.q'); if (q) { q.style.color = '#d93025'; setTimeout(() => q.style.color = '', 2000); }
+      const qe = scope.querySelector('.q-err'); if (qe) { qe.classList.add('show'); setTimeout(() => qe.classList.remove('show'), 2500); }
     }
     return ok;
   };
@@ -183,9 +184,20 @@
   /* Multi-step savings form */
   $$('form[data-steps]').forEach(form => {
     const steps = $$('.fstep', form), bars = $$('.stepper i', form); let s = 0;
-    const show = () => { steps.forEach((st, k) => st.classList.toggle('on', k === s)); bars.forEach((b, k) => b.classList.toggle('on', k <= s)); };
+    const no = $('[data-stepno]', form);
+    const show = (focus) => {
+      steps.forEach((st, k) => st.classList.toggle('on', k === s)); bars.forEach((b, k) => b.classList.toggle('on', k <= s));
+      if (no) no.textContent = s + 1;
+      if (focus) setTimeout(() => steps[s].querySelector('input:not([type=radio]),select')?.focus({ preventScroll: true }), 60);
+    };
+    // choosing a service on step 1 moves straight on
+    form.addEventListener('change', e => {
+      if (e.target.matches('input[type=radio]') && steps[s] && steps[s].contains(e.target) && steps[s].querySelector('.hx__hidden-next')) {
+        setTimeout(() => { s = Math.min(steps.length - 1, s + 1); show(true); }, 220);
+      }
+    });
     form.addEventListener('click', e => {
-      if (e.target.closest('[data-next-step]')) { e.preventDefault(); if (validate(form, steps[s])) { s = Math.min(steps.length - 1, s + 1); show(); } }
+      if (e.target.closest('[data-next-step]')) { e.preventDefault(); if (validate(form, steps[s])) { s = Math.min(steps.length - 1, s + 1); show(true); } }
       if (e.target.closest('[data-prev-step]')) { e.preventDefault(); s = Math.max(0, s - 1); show(); }
     });
     const bill = $('#bill', form), billOut = $('#bill-out', form);
