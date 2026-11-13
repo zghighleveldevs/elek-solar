@@ -141,7 +141,7 @@ svg.arr{width:16px;height:16px;flex:none;transition:transform var(--dur) var(--e
 .section{padding:var(--section) 0}
 .section--surface{background:var(--surface)}
 .section--tight{padding:calc(var(--section)*.6) 0}
-.section + .section:not(.section--surface):not(.dark){padding-top:0}
+.section:not(.section--surface):not(.dark) + .section:not(.section--surface):not(.dark){padding-top:0}
 .dark{background:var(--dark);color:rgba(255,255,255,.72)}
 .dark h1,.dark h2,.dark h3,.dark h4{color:#fff}
 .dark .lead{color:rgba(255,255,255,.65)}
