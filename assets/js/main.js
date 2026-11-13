@@ -255,11 +255,23 @@
   top && top.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
 
   // word-by-word heading reveal
-  $$('.sec-head h2, .wr-auto').forEach(h => {
+  $$('.wr-auto').forEach(h => {
     if (h.querySelector('.w')) return;
-    h.classList.add('wr');
-    h.innerHTML = h.innerHTML.split(/(\s+)/).map(t => /^\s+$/.test(t) || !t ? t : `<span class="w"><span>${t}</span></span>`).join('');
-    $$('.w>span', h).forEach((s, i) => s.style.transitionDelay = (i * 0.06) + 's');
+    h.classList.add('wr'); let k = 0;
+    const walk = node => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const f = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(t => {
+          if (!t) return;
+          if (/^\s+$/.test(t)) return f.appendChild(document.createTextNode(t));
+          const w = document.createElement('span'); w.className = 'w';
+          const s = document.createElement('span'); s.textContent = t; s.style.transitionDelay = (k++ * .06) + 's';
+          w.appendChild(s); f.appendChild(w);
+        });
+        n.replaceWith(f);
+      } else if (n.nodeType === 1 && n.tagName !== 'svg') walk(n);
+    });
+    walk(h);
   });
   const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: .2 });
   $$('.wr, .wipe').forEach(el => io2.observe(el));
@@ -294,6 +306,25 @@
       anim($('#est-sys', est), kw); anim($('#est-yr', est), bill * 12); anim($('#est-25', est), tot - cost); anim($('#est-util', est), tot);
     };
     r.addEventListener('input', run); run();
+  }
+
+  // gentle parallax on large photos
+  const px = $$('[data-parallax]');
+  if (px.length && !reduced) {
+    const upd = () => px.forEach(el => {
+      const r = el.parentElement.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+      const k = parseFloat(el.dataset.parallax) || .15; const y = (r.top + r.height / 2 - innerHeight / 2) * -k;
+      el.style.transform = `translate3d(0,${y.toFixed(1)}px,0)`;
+    });
+    addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); upd();
+  }
+
+  // magnetic buttons (desktop only)
+  if (!reduced && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    $$('.btn').forEach(b => {
+      b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px,${(e.clientY - r.top - r.height / 2) * .28}px)`; });
+      b.addEventListener('pointerleave', () => b.style.transform = '');
+    });
   }
 
   /* Footer year */
