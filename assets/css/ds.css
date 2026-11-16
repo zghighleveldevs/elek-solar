@@ -687,3 +687,67 @@ a.tile:hover .tile__go{background:var(--accent);border-color:var(--accent);color
 .page-head--bg .btn--ghost:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.14)}
 @media (max-width:720px){.page-head--bg{min-height:0;padding:96px 0 80px}}
 @media (prefers-reduced-motion:reduce){.page-head__bg img{animation:none}}
+
+/* =====================================================================
+   SECONDARY TINTS — supporting shades for boxes. Core brand colours
+   (navy #0B2A4A, gold #F5A800, sky #08ACF2, white) are unchanged.
+   ===================================================================== */
+:root{
+  --t-cream:#FBF6EC;   --t-cream-b:rgba(176,132,52,.16);   /* warm cream / sand */
+  --t-amber:#FFF4DC;   --t-amber-b:rgba(245,168,0,.24);    /* amber-tinted */
+  --t-ice:#EAF6FD;     --t-ice-b:rgba(8,172,242,.18);      /* soft cyan / ice */
+  --t-slate:#EEF2F7;   --t-slate-b:rgba(70,95,125,.16);    /* muted slate blue */
+  --slate:#5A7088;     --slate-ink:#34506E;
+}
+
+/* feature cards — rotate four tones, icon colour follows the tone */
+.feature{background:linear-gradient(180deg,var(--tone,#fff) 0%,#fff 140%);border-color:var(--tone-b,var(--line))}
+.grid > .feature:nth-child(4n+1){--tone:var(--t-cream);--tone-b:var(--t-cream-b)}
+.grid > .feature:nth-child(4n+2){--tone:var(--t-ice);--tone-b:var(--t-ice-b)}
+.grid > .feature:nth-child(4n+3){--tone:var(--t-slate);--tone-b:var(--t-slate-b)}
+.grid > .feature:nth-child(4n+4){--tone:var(--t-amber);--tone-b:var(--t-amber-b)}
+.grid > .feature:nth-child(4n+1) .icon{background:#fff;border-color:var(--t-cream-b);color:var(--accent-ink)}
+.grid > .feature:nth-child(4n+2) .icon{background:#fff;border-color:var(--t-ice-b);color:var(--sky-ink)}
+.grid > .feature:nth-child(4n+3) .icon{background:#fff;border-color:var(--t-slate-b);color:var(--slate-ink)}
+.grid > .feature:nth-child(4n+4) .icon{background:#fff;border-color:var(--t-amber-b);color:var(--accent-ink)}
+.feature.card--hover:hover{border-color:var(--tone-b);box-shadow:0 1px 2px rgba(11,42,74,.04),0 16px 36px -18px rgba(11,42,74,.22)}
+
+/* stat boxes — each figure gets its own soft panel */
+.stats{background:transparent;border:0;box-shadow:none;gap:12px}
+.stats > div{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:var(--shadow-xs)}
+.stats > div + div{border-left:1px solid var(--line)}
+.stats > div:nth-child(1){background:var(--t-amber);border-color:var(--t-amber-b)}
+.stats > div:nth-child(1) strong sup{color:var(--accent-ink)}
+.stats > div:nth-child(2){background:var(--t-ice);border-color:var(--t-ice-b)}
+.stats > div:nth-child(3){background:var(--t-cream);border-color:var(--t-cream-b)}
+.stats > div:nth-child(3) strong sup{color:var(--accent-ink)}
+.stats > div:nth-child(4){background:var(--t-slate);border-color:var(--t-slate-b)}
+.stats > div:nth-child(4) p,.stats > div:nth-child(2) p{color:var(--slate)}
+.tile--accent{background:linear-gradient(160deg,var(--t-amber),var(--t-cream));border-color:var(--t-amber-b)}
+.tile--accent .stat{color:var(--navy)}
+a.tile:not(.tile--img):not(.tile--dark){background:linear-gradient(160deg,var(--t-ice),#fff 120%);border-color:var(--t-ice-b)}
+
+/* step containers — cool → warm progression across the four steps */
+.steps .step{border-color:var(--tone-b,var(--line));background:linear-gradient(180deg,var(--tone,#fff),#fff 160%)}
+.steps .step:nth-child(1){--tone:var(--t-ice);--tone-b:var(--t-ice-b)}
+.steps .step:nth-child(2){--tone:var(--t-slate);--tone-b:var(--t-slate-b)}
+.steps .step:nth-child(3){--tone:var(--t-cream);--tone-b:var(--t-cream-b)}
+.steps .step:nth-child(4){--tone:var(--t-amber);--tone-b:var(--t-amber-b)}
+.steps .step:nth-child(1) .step__n{background:var(--sky)}
+.steps .step:nth-child(2) .step__n{background:var(--slate-ink)}
+.steps .step:nth-child(3) .step__n{background:var(--navy)}
+.steps .step:nth-child(4) .step__n{background:var(--accent);color:var(--navy)}
+
+/* testimonial cards — warm cream feature, alternating soft tones */
+.quote{border-color:var(--tone-b,var(--line));background:var(--tone,#fff)}
+.quote--feature{--tone:var(--t-cream);--tone-b:var(--t-cream-b)}
+.quotes > .quote:not(.quote--feature):nth-child(3n+2){--tone:var(--t-ice);--tone-b:var(--t-ice-b)}
+.quotes > .quote:not(.quote--feature):nth-child(3n){--tone:var(--t-amber);--tone-b:var(--t-amber-b)}
+.quotes > .quote:not(.quote--feature):nth-child(3n+1){--tone:var(--t-slate);--tone-b:var(--t-slate-b)}
+.quote .avatar{background:#fff;border-color:var(--tone-b,var(--line))}
+.tslider .quote,.tslider .card{--tone:var(--t-cream);--tone-b:var(--t-cream-b)}
+
+/* numbered reason boxes + info box pick up the same family */
+.numbered li:nth-child(odd){background:var(--t-ice);border-color:var(--t-ice-b)}
+.numbered li:nth-child(even){background:var(--t-cream);border-color:var(--t-cream-b)}
+.info{background:linear-gradient(180deg,var(--t-cream),#fff);border-color:var(--t-cream-b)}
