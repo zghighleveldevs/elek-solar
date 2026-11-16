@@ -870,3 +870,83 @@ a.tile:not(.tile--img):not(.tile--dark){background:linear-gradient(160deg,var(--
 .js .calc-out.fx.in{transform:perspective(2400px) rotateY(calc((var(--f,.3) - .5) * -3deg))}
 .orbit3d--head{bottom:-40px}
 .est-bill{display:block;width:fit-content}
+
+/* =====================================================================
+   SUNLIT REFRESH — navy #0B2A4A unchanged; brighter gold, electric sky,
+   cleaner fills. Overrides the tokens used everywhere above.
+   ===================================================================== */
+:root{
+  /* vivid solar gold */
+  --accent:#FFB300; --accent-hover:#FFC21F; --accent-soft:#FFF4CC; --accent-ink:#9A5F00; --gold-edge:#D99200;
+  /* electric sky / cyan */
+  --sky:#00B2FF; --sky-hover:#009CE6; --sky-ink:#0072CE; --sky-soft:#E1F5FF;
+  --cyan:#14D3F0;
+  /* clean bright fills */
+  --mist:#F2F9FF; --mist-2:#E4F2FE;
+  --surface:var(--mist); --surface-2:var(--mist-2);
+  --t-cream:#FFF9EC; --t-cream-b:rgba(255,179,0,.22);
+  --t-amber:#FFF0C7; --t-amber-b:rgba(255,179,0,.38);
+  --t-ice:#E4F6FF;   --t-ice-b:rgba(0,178,255,.26);
+  --t-slate:#E5FAF6; --t-slate-b:rgba(0,190,160,.24);     /* fresh aqua replaces grey slate */
+  --slate:#24786B; --slate-ink:#00A389;
+  /* crisper text greys, tinted toward navy instead of neutral grey */
+  --ink-2:#2E3F55; --ink-3:#55677D; --ink-4:#8496AB;
+  --line:rgba(11,42,74,.09); --line-2:rgba(11,42,74,.16);
+}
+
+/* accent words in headings: electric sky on light, gold on photos/dark */
+.mute{background:linear-gradient(90deg,#0086E0,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.dark .mute,.cta .mute,.hero--bg h1 .mute,.page-head--bg h1 .mute{background:linear-gradient(90deg,#FFB300,#FFD25E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero--bg .lead .mute,.page-head--bg .lead .mute{color:inherit;background:none}
+
+/* buttons: brighter gold with a sunlit top highlight */
+.btn--primary{background:linear-gradient(180deg,#FFC533,#FFB300);color:var(--navy);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 0 var(--gold-edge),0 12px 24px -8px rgba(255,179,0,.65)}
+.btn--primary:hover{background:linear-gradient(180deg,#FFD050,#FFBC14);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 0 var(--gold-edge),0 18px 30px -10px rgba(255,179,0,.7)}
+.btn--primary:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 0 var(--gold-edge),0 4px 8px -4px rgba(255,179,0,.5)}
+.nav .btn--primary,.site-header .btn--primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 var(--gold-edge),0 8px 16px -8px rgba(255,179,0,.6)}
+
+/* icons, badges, active states */
+.icon{background:var(--sky-soft);border-color:rgba(0,178,255,.28);color:var(--sky-ink)}
+.icon--accent{background:var(--accent-soft);border-color:rgba(255,179,0,.4);color:var(--accent-ink)}
+.eyebrow{border-color:rgba(0,178,255,.25)}
+.eyebrow .dot{background:var(--sky);box-shadow:0 0 0 3px rgba(0,178,255,.2),0 0 10px rgba(0,178,255,.6)}
+.tag{background:var(--sky-soft);border-color:rgba(0,178,255,.28);color:var(--sky-ink)}
+.menu>li>a:hover,.menu>li>a.active{background:var(--sky-soft);color:var(--sky-ink)}
+.options label:has(input:checked){border-color:var(--sky);background:var(--sky-soft);box-shadow:0 0 0 3px rgba(0,178,255,.18)}
+.check-list .i{background:var(--sky-soft);color:var(--sky-ink)}
+.dark .check-list .i,.cta .check-list .i{background:rgba(0,178,255,.18);color:var(--cyan)}
+.stats strong sup{color:var(--sky)}
+.stats > div:nth-child(1) strong sup,.stats > div:nth-child(3) strong sup{color:#F29D00}
+.stats > div:nth-child(4) strong sup{color:var(--slate-ink)}
+.stats > div:nth-child(2) p{color:#2C6A93}
+.stats > div:nth-child(4) p{color:var(--slate)}
+.est-out .big strong,.est-card .big strong{color:var(--accent)}
+.stars,.stars svg{color:var(--accent)}
+
+/* cards & sections pop: bright fills, crisp edges, cool shadows */
+.section--surface{background:linear-gradient(180deg,#F4FAFF 0%,#EAF5FF 100%)}
+.footer{background:linear-gradient(180deg,#F2F9FF,#E8F4FE)}
+.feature{background:linear-gradient(165deg,var(--tone,#fff) 0%,#fff 95%)}
+.grid > .feature:nth-child(4n+3) .icon{color:var(--slate-ink)}
+.card,.tile,.quote,.stats > div,.numbered li,.info{box-shadow:0 1px 2px rgba(11,42,74,.05),0 8px 22px -14px rgba(11,42,74,.18)}
+.section--surface .card,.section--surface .tile,.section--surface .stats > div{box-shadow:0 1px 2px rgba(11,42,74,.05),0 10px 26px -14px rgba(0,110,190,.22)}
+.steps .step:nth-child(2) .step__n{background:var(--slate-ink)}
+.steps .step:nth-child(1) .step__n{background:var(--sky)}
+.steps .step:nth-child(4) .step__n{background:linear-gradient(180deg,#FFC533,#FFB300);color:var(--navy)}
+.step__n{box-shadow:0 4px 10px -3px rgba(11,42,74,.3)}
+.tile--accent{background:linear-gradient(150deg,#FFE9A8 0%,#FFF6DA 60%,#fff 100%);border-color:rgba(255,179,0,.4)}
+.tile--accent .stat{color:var(--navy)}
+a.tile:not(.tile--img):not(.tile--dark){background:linear-gradient(150deg,#D9F2FF 0%,#F2FAFF 60%,#fff 100%);border-color:rgba(0,178,255,.3)}
+.tile--dark,.est-card,.cta,.card--dark{background:radial-gradient(120% 90% at 100% 0%,#14497C 0%,var(--navy) 55%)}
+.quote--feature{background:linear-gradient(160deg,#FFF3D1 0%,#FFFBF1 55%)}
+.numbered li::before{color:var(--sky)}
+.numbered li:nth-child(even)::before{color:#F29D00}
+
+/* page-head & hero: keep navy, add a sunlit sky edge */
+.page-head--bg::after{background:linear-gradient(180deg,rgba(11,42,74,.5) 0%,rgba(11,42,74,.58) 45%,rgba(11,42,74,.8) 100%),radial-gradient(70% 60% at 85% 0%,rgba(0,178,255,.22),rgba(0,178,255,0) 70%)}
+.hero--bg::after{background:linear-gradient(90deg,rgba(11,42,74,.9) 0%,rgba(11,42,74,.7) 42%,rgba(11,42,74,.32) 72%,rgba(11,42,74,.18) 100%),radial-gradient(50% 60% at 90% 10%,rgba(255,179,0,.18),rgba(255,179,0,0) 70%),linear-gradient(0deg,rgba(11,42,74,.45),rgba(11,42,74,0) 40%)}
+
+/* range slider fills */
+.est-card input[type=range]{background:linear-gradient(90deg,var(--accent) 0,var(--accent) var(--fill,30%),rgba(255,255,255,.16) var(--fill,30%))}
+:focus-visible{outline-color:var(--sky)}
+::selection{background:var(--sky);color:#fff}
