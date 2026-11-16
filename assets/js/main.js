@@ -165,7 +165,6 @@
     const radios = $$('input[type=radio][required]', scope);
     if (radios.length && !radios.some(r => r.checked)) {
       ok = false; const q = scope.querySelector('.q'); if (q) { q.style.color = '#d93025'; setTimeout(() => q.style.color = '', 2000); }
-      const qe = scope.querySelector('.q-err'); if (qe) { qe.classList.add('show'); setTimeout(() => qe.classList.remove('show'), 2500); }
     }
     return ok;
   };
@@ -184,20 +183,9 @@
   /* Multi-step savings form */
   $$('form[data-steps]').forEach(form => {
     const steps = $$('.fstep', form), bars = $$('.stepper i', form); let s = 0;
-    const no = $('[data-stepno]', form);
-    const show = (focus) => {
-      steps.forEach((st, k) => st.classList.toggle('on', k === s)); bars.forEach((b, k) => b.classList.toggle('on', k <= s));
-      if (no) no.textContent = s + 1;
-      if (focus) setTimeout(() => steps[s].querySelector('input:not([type=radio]),select')?.focus({ preventScroll: true }), 60);
-    };
-    // choosing a service on step 1 moves straight on
-    form.addEventListener('change', e => {
-      if (e.target.matches('input[type=radio]') && steps[s] && steps[s].contains(e.target) && steps[s].querySelector('.hx__hidden-next')) {
-        setTimeout(() => { s = Math.min(steps.length - 1, s + 1); show(true); }, 220);
-      }
-    });
+    const show = () => { steps.forEach((st, k) => st.classList.toggle('on', k === s)); bars.forEach((b, k) => b.classList.toggle('on', k <= s)); };
     form.addEventListener('click', e => {
-      if (e.target.closest('[data-next-step]')) { e.preventDefault(); if (validate(form, steps[s])) { s = Math.min(steps.length - 1, s + 1); show(true); } }
+      if (e.target.closest('[data-next-step]')) { e.preventDefault(); if (validate(form, steps[s])) { s = Math.min(steps.length - 1, s + 1); show(); } }
       if (e.target.closest('[data-prev-step]')) { e.preventDefault(); s = Math.max(0, s - 1); show(); }
     });
     const bill = $('#bill', form), billOut = $('#bill-out', form);
@@ -267,23 +255,11 @@
   top && top.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
 
   // word-by-word heading reveal
-  $$('.wr-auto').forEach(h => {
+  $$('.sec-head h2, .wr-auto').forEach(h => {
     if (h.querySelector('.w')) return;
-    h.classList.add('wr'); let k = 0;
-    const walk = node => [...node.childNodes].forEach(n => {
-      if (n.nodeType === 3) {
-        const f = document.createDocumentFragment();
-        n.textContent.split(/(\s+)/).forEach(t => {
-          if (!t) return;
-          if (/^\s+$/.test(t)) return f.appendChild(document.createTextNode(t));
-          const w = document.createElement('span'); w.className = 'w';
-          const s = document.createElement('span'); s.textContent = t; s.style.transitionDelay = (k++ * .06) + 's';
-          w.appendChild(s); f.appendChild(w);
-        });
-        n.replaceWith(f);
-      } else if (n.nodeType === 1 && n.tagName !== 'svg') walk(n);
-    });
-    walk(h);
+    h.classList.add('wr');
+    h.innerHTML = h.innerHTML.split(/(\s+)/).map(t => /^\s+$/.test(t) || !t ? t : `<span class="w"><span>${t}</span></span>`).join('');
+    $$('.w>span', h).forEach((s, i) => s.style.transitionDelay = (i * 0.06) + 's');
   });
   const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: .2 });
   $$('.wr, .wipe').forEach(el => io2.observe(el));
@@ -318,85 +294,6 @@
       anim($('#est-sys', est), kw); anim($('#est-yr', est), bill * 12); anim($('#est-25', est), tot - cost); anim($('#est-util', est), tot);
     };
     r.addEventListener('input', run); run();
-  }
-
-  // gentle parallax on large photos
-  const px = $$('[data-parallax]');
-  if (px.length && !reduced) {
-    const upd = () => px.forEach(el => {
-      const r = el.parentElement.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
-      const k = parseFloat(el.dataset.parallax) || .15; const y = (r.top + r.height / 2 - innerHeight / 2) * -k;
-      el.style.transform = `translate3d(0,${y.toFixed(1)}px,0)`;
-    });
-    addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); upd();
-  }
-
-
-  /* ================= 3D layer ================= */
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  // build the CSS-3D sun-orbit wireframes
-  $$('[data-orbit]').forEach(o => {
-    o.innerHTML = '<div class="o3-scene"><i class="o3-grid"></i><i class="o3-ring r1"><b></b></i><i class="o3-ring r2"><b></b><b></b></i><i class="o3-ring r3"><b></b><b></b><b></b></i></div><span class="o3-sun"></span>';
-  });
-  // build the isometric 3D solar panels
-  $$('[data-panel3d]').forEach(p => {
-    p.innerHTML = '<div class="p3"><div class="p3-tilt"><span class="p3-back"></span><span class="p3-plate">' + '<i></i>'.repeat(24) + '<em class="p3-sweep"></em></span></div><span class="p3-sun"></span></div>';
-  });
-
-  // slider-driven 3D state (estimator + calculator)
-  const energize = (range, card) => {
-    if (!range || !card) return;
-    let last = range.value;
-    const bill = card.querySelector('#est-bill');
-    const u = () => {
-      const f = (range.value - range.min) / (range.max - range.min);
-      card.style.setProperty('--f', f.toFixed(3));
-      card.style.setProperty('--e', (.18 + f * .82).toFixed(3));
-      if (bill && range.value !== last && !reduced) { bill.classList.remove('flip'); void bill.offsetWidth; bill.classList.add('flip'); }
-      last = range.value;
-    };
-    range.addEventListener('input', u); u();
-  };
-  energize($('#est-r'), $('.est-card'));
-  energize($('#c-bill'), $('.calc-out'));
-
-  if (!reduced && fine) {
-    // pointer-reactive orbits
-    const orbits = $$('.orbit3d');
-    let mx = 0, my = 0, queued = false;
-    addEventListener('pointermove', e => {
-      mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
-      if (queued) return; queued = true;
-      requestAnimationFrame(() => { queued = false;
-        orbits.forEach(o => { o.style.setProperty('--rx', (mx * 16).toFixed(2) + 'deg'); o.style.setProperty('--ry', (my * -10).toFixed(2) + 'deg'); });
-      });
-    }, { passive: true });
-
-    // 3D tilt + specular glare on cards
-    const tiltSel = '.feature, .bento .tile, .quote, .steps .step, .stats > div, .card--hover, .numbered li';
-    $$(tiltSel).forEach(el => {
-      if (el.closest('.form-card')) return;
-      const big = el.offsetWidth > 560, max = big ? 3 : 7;
-      const g = document.createElement('span'); g.className = 'glare'; g.setAttribute('aria-hidden', 'true'); el.appendChild(g);
-      el.classList.add('tilt');
-      let raf = 0;
-      el.addEventListener('pointerenter', () => { el.style.transition = 'transform .14s ease-out, box-shadow .3s'; });
-      el.addEventListener('pointermove', e => {
-        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          el.style.transform = `perspective(900px) rotateX(${((.5 - y) * max).toFixed(2)}deg) rotateY(${((x - .5) * max).toFixed(2)}deg) translate3d(0,-4px,0)`;
-          el.style.setProperty('--gx', (x * 100).toFixed(1) + '%'); el.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
-          el.style.setProperty('--sx', ((.5 - x) * 18).toFixed(1) + 'px'); el.style.setProperty('--sy', ((.5 - y) * 18 + 18).toFixed(1) + 'px');
-        });
-      });
-      el.addEventListener('pointerleave', () => {
-        cancelAnimationFrame(raf);
-        el.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1), box-shadow .4s';
-        el.style.transform = '';
-      });
-    });
   }
 
   /* Footer year */
