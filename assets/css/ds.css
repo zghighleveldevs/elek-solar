@@ -950,3 +950,86 @@ a.tile:not(.tile--img):not(.tile--dark){background:linear-gradient(150deg,#D9F2F
 .est-card input[type=range]{background:linear-gradient(90deg,var(--accent) 0,var(--accent) var(--fill,30%),rgba(255,255,255,.16) var(--fill,30%))}
 :focus-visible{outline-color:var(--sky)}
 ::selection{background:var(--sky);color:#fff}
+
+/* =====================================================================
+   NIGHT SECTIONS — light/dark rhythm. Deep navy canvas with sky + gold
+   light, glass cards, glowing numbers.
+   ===================================================================== */
+.section--night{position:relative;isolation:isolate;overflow:hidden;color:rgba(255,255,255,.72);
+  background:
+    radial-gradient(60% 55% at 12% 0%,rgba(0,178,255,.22),rgba(0,178,255,0) 70%),
+    radial-gradient(45% 50% at 95% 100%,rgba(255,179,0,.14),rgba(255,179,0,0) 70%),
+    linear-gradient(180deg,#0B2A4A 0%,#08213B 100%)}
+.section--night-alt{background:
+    radial-gradient(55% 55% at 92% 0%,rgba(0,178,255,.2),rgba(0,178,255,0) 70%),
+    radial-gradient(50% 45% at 0% 100%,rgba(255,179,0,.12),rgba(255,179,0,0) 70%),
+    linear-gradient(180deg,#08213B 0%,#0B2A4A 100%)}
+.section--night::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 56px),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 56px);
+  -webkit-mask:radial-gradient(80% 70% at 50% 40%,#000 20%,transparent 85%);mask:radial-gradient(80% 70% at 50% 40%,#000 20%,transparent 85%)}
+.night__glow{position:absolute;z-index:-1;width:520px;height:520px;border-radius:50%;left:50%;top:-260px;margin-left:-260px;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(0,178,255,.18),rgba(0,178,255,0));filter:blur(10px);animation:nightDrift 18s ease-in-out infinite alternate}
+@keyframes nightDrift{to{transform:translate(180px,60px) scale(1.15)}}
+.section--night + .section:not(.dark){border-top:0}
+
+/* type */
+.section--night h2,.section--night h3,.section--night h4{color:#fff}
+.section--night .lead,.section--night .sec-head p{color:rgba(255,255,255,.66)}
+.section--night .mute{background:linear-gradient(90deg,#FFB300,#FFD25E 55%,#FFE7A3);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section--night .eyebrow{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.85);box-shadow:none}
+.section--night .eyebrow .dot{background:var(--cyan);box-shadow:0 0 0 3px rgba(20,211,240,.2),0 0 12px rgba(20,211,240,.8)}
+
+/* glass cards (features) with a coloured light per card */
+.section--night .card,.section--night .feature{background:linear-gradient(160deg,var(--nt,rgba(255,255,255,.07)) 0%,rgba(255,255,255,.025) 60%);border:1px solid var(--nb,rgba(255,255,255,.1));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px -24px rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.section--night .card p{color:rgba(255,255,255,.64)}
+.section--night .grid > .feature:nth-child(4n+1){--nt:rgba(255,179,0,.13);--nb:rgba(255,179,0,.26);--ni:#FFC533}
+.section--night .grid > .feature:nth-child(4n+2){--nt:rgba(0,178,255,.14);--nb:rgba(0,178,255,.28);--ni:#4CCBFF}
+.section--night .grid > .feature:nth-child(4n+3){--nt:rgba(20,211,240,.12);--nb:rgba(20,211,240,.26);--ni:#3FE0F5}
+.section--night .grid > .feature:nth-child(4n+4){--nt:rgba(255,179,0,.1);--nb:rgba(255,200,80,.24);--ni:#FFD25E}
+.section--night .grid > .feature .icon{background:rgba(255,255,255,.06);border-color:var(--nb);color:var(--ni,#fff);box-shadow:0 0 18px -4px var(--nb)}
+.section--night .feature.card--hover:hover,.section--night .tilt:hover{border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),var(--sx,0) var(--sy,18px) 44px -18px rgba(0,0,0,.7),0 0 40px -12px var(--nb,rgba(0,178,255,.4))}
+.section--night .glare{mix-blend-mode:overlay!important;background:radial-gradient(380px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),rgba(255,255,255,0) 55%)!important}
+
+/* glowing stat boxes */
+.section--night .stats > div{background:linear-gradient(160deg,var(--nt) 0%,rgba(255,255,255,.02) 75%)!important;border:1px solid var(--nb)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.section--night .stats > div:nth-child(1){--nt:rgba(255,179,0,.16);--nb:rgba(255,179,0,.3);--nc:#FFC533}
+.section--night .stats > div:nth-child(2){--nt:rgba(0,178,255,.16);--nb:rgba(0,178,255,.3);--nc:#4CCBFF}
+.section--night .stats > div:nth-child(3){--nt:rgba(255,210,94,.12);--nb:rgba(255,210,94,.26);--nc:#FFD25E}
+.section--night .stats > div:nth-child(4){--nt:rgba(20,211,240,.14);--nb:rgba(20,211,240,.28);--nc:#3FE0F5}
+.section--night .stats strong{color:#fff;text-shadow:0 0 28px var(--nb)}
+.section--night .stats strong sup{color:var(--nc)!important}
+.section--night .stats > div p{color:rgba(255,255,255,.62)!important}
+
+/* process steps: glass + glowing numbered nodes + light-beam connector */
+.section--night .steps .step{background:linear-gradient(170deg,rgba(255,255,255,.07),rgba(255,255,255,.02))!important;border:1px solid rgba(255,255,255,.1)!important}
+.section--night .steps .step:nth-child(1){--nb:rgba(0,178,255,.35)}
+.section--night .steps .step:nth-child(2){--nb:rgba(20,211,240,.35)}
+.section--night .steps .step:nth-child(3){--nb:rgba(120,190,255,.35)}
+.section--night .steps .step:nth-child(4){--nb:rgba(255,179,0,.4)}
+.section--night .step__n{box-shadow:0 0 0 4px rgba(255,255,255,.04),0 0 22px var(--nb)}
+.section--night .steps .step:nth-child(1) .step__n{background:var(--sky)}
+.section--night .steps .step:nth-child(2) .step__n{background:#10C2DE}
+.section--night .steps .step:nth-child(3) .step__n{background:#3D7FE0}
+.section--night .steps .step:nth-child(4) .step__n{background:linear-gradient(180deg,#FFC533,#FFB300);color:var(--navy)}
+.section--night .step__line{height:2px;top:43px;background:linear-gradient(90deg,var(--nb),rgba(255,255,255,0));opacity:.9}
+.section--night .step__line::after{content:"";position:absolute;top:-1px;left:0;width:40px;height:4px;border-radius:4px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff,rgba(255,255,255,0));opacity:.7;animation:beam 3.2s ease-in-out infinite}
+.section--night .steps .step:nth-child(2) .step__line::after{animation-delay:.4s}
+.section--night .steps .step:nth-child(3) .step__line::after{animation-delay:.8s}
+@keyframes beam{0%{left:0;opacity:0}20%{opacity:.8}100%{left:calc(100% - 40px);opacity:0}}
+.section--night .btn--ghost{color:#fff;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+
+/* ---- night footer ---- */
+.footer--night{position:relative;overflow:hidden;isolation:isolate;border-top:0;color:rgba(255,255,255,.62);
+  background:radial-gradient(50% 70% at 0% 0%,rgba(0,178,255,.14),rgba(0,178,255,0) 70%),radial-gradient(40% 60% at 100% 100%,rgba(255,179,0,.1),rgba(255,179,0,0) 70%),#071C33!important}
+.footer--night::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,rgba(0,178,255,0),rgba(0,178,255,.6),rgba(255,179,0,.6),rgba(255,179,0,0))}
+.footer--night .brand img{filter:none}
+.footer--night h5{color:#fff}
+.footer--night a{color:rgba(255,255,255,.66);transition:color .2s}
+.footer--night a:hover{color:var(--accent)}
+.footer--night .socials a{border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.8);background:rgba(255,255,255,.03)}
+.footer--night .socials a:hover{background:var(--accent);border-color:var(--accent);color:var(--navy)}
+.footer--night .footer__bottom{border-top-color:rgba(255,255,255,.1)!important}
+
+@media (prefers-reduced-motion:reduce){.night__glow,.section--night .step__line::after{animation:none}}
+.tile--img p{color:rgba(255,255,255,.88)!important;text-shadow:0 1px 12px rgba(0,0,0,.45)}
+.tile--img::after{background:linear-gradient(180deg,rgba(11,42,74,.35) 0%,rgba(11,42,74,0) 26%,rgba(11,42,74,.25) 50%,rgba(7,28,51,.94) 100%)!important}
