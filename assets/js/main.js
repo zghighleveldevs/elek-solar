@@ -331,6 +331,74 @@
     addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); upd();
   }
 
+
+  /* ================= 3D layer ================= */
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // build the CSS-3D sun-orbit wireframes
+  $$('[data-orbit]').forEach(o => {
+    o.innerHTML = '<div class="o3-scene"><i class="o3-grid"></i><i class="o3-ring r1"><b></b></i><i class="o3-ring r2"><b></b><b></b></i><i class="o3-ring r3"><b></b><b></b><b></b></i></div><span class="o3-sun"></span>';
+  });
+  // build the isometric 3D solar panels
+  $$('[data-panel3d]').forEach(p => {
+    p.innerHTML = '<div class="p3"><div class="p3-tilt"><span class="p3-back"></span><span class="p3-plate">' + '<i></i>'.repeat(24) + '<em class="p3-sweep"></em></span></div><span class="p3-sun"></span></div>';
+  });
+
+  // slider-driven 3D state (estimator + calculator)
+  const energize = (range, card) => {
+    if (!range || !card) return;
+    let last = range.value;
+    const bill = card.querySelector('#est-bill');
+    const u = () => {
+      const f = (range.value - range.min) / (range.max - range.min);
+      card.style.setProperty('--f', f.toFixed(3));
+      card.style.setProperty('--e', (.18 + f * .82).toFixed(3));
+      if (bill && range.value !== last && !reduced) { bill.classList.remove('flip'); void bill.offsetWidth; bill.classList.add('flip'); }
+      last = range.value;
+    };
+    range.addEventListener('input', u); u();
+  };
+  energize($('#est-r'), $('.est-card'));
+  energize($('#c-bill'), $('.calc-out'));
+
+  if (!reduced && fine) {
+    // pointer-reactive orbits
+    const orbits = $$('.orbit3d');
+    let mx = 0, my = 0, queued = false;
+    addEventListener('pointermove', e => {
+      mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+      if (queued) return; queued = true;
+      requestAnimationFrame(() => { queued = false;
+        orbits.forEach(o => { o.style.setProperty('--rx', (mx * 16).toFixed(2) + 'deg'); o.style.setProperty('--ry', (my * -10).toFixed(2) + 'deg'); });
+      });
+    }, { passive: true });
+
+    // 3D tilt + specular glare on cards
+    const tiltSel = '.feature, .bento .tile, .quote, .steps .step, .stats > div, .card--hover, .numbered li';
+    $$(tiltSel).forEach(el => {
+      if (el.closest('.form-card')) return;
+      const big = el.offsetWidth > 560, max = big ? 3 : 7;
+      const g = document.createElement('span'); g.className = 'glare'; g.setAttribute('aria-hidden', 'true'); el.appendChild(g);
+      el.classList.add('tilt');
+      let raf = 0;
+      el.addEventListener('pointerenter', () => { el.style.transition = 'transform .14s ease-out, box-shadow .3s'; });
+      el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          el.style.transform = `perspective(900px) rotateX(${((.5 - y) * max).toFixed(2)}deg) rotateY(${((x - .5) * max).toFixed(2)}deg) translate3d(0,-4px,0)`;
+          el.style.setProperty('--gx', (x * 100).toFixed(1) + '%'); el.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+          el.style.setProperty('--sx', ((.5 - x) * 18).toFixed(1) + 'px'); el.style.setProperty('--sy', ((.5 - y) * 18 + 18).toFixed(1) + 'px');
+        });
+      });
+      el.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(raf);
+        el.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1), box-shadow .4s';
+        el.style.transform = '';
+      });
+    });
+  }
+
   /* Footer year */
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
 })();
