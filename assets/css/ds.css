@@ -665,3 +665,25 @@ a.tile:hover .tile__go{background:var(--accent);border-color:var(--accent);color
 .tile--img::after{background:linear-gradient(180deg,rgba(11,42,74,.35) 0%,rgba(11,42,74,0) 28%,rgba(11,42,74,.15) 50%,rgba(11,42,74,.88) 100%)}
 .field input:focus,.field select:focus,.field textarea:focus,.search input:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(8,172,242,.15)}
 .options label:hover{border-color:rgba(8,172,242,.5)}
+
+/* =====================================================================
+   PAGE HEAD — full-bleed photo behind the title (all inner pages)
+   ===================================================================== */
+.page-head--bg{position:relative;isolation:isolate;padding:clamp(110px,13vw,170px) 0 clamp(96px,11vw,150px);min-height:min(560px,72svh);display:flex;align-items:center;background:var(--navy);color:rgba(255,255,255,.8)}
+.page-head--bg::before{display:none}
+.page-head__bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.page-head__bg img{width:100%;height:100%;object-fit:cover;animation:heroZoom 24s var(--ease-out) both}
+.page-head--bg::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,42,74,.55) 0%,rgba(11,42,74,.62) 45%,rgba(11,42,74,.82) 100%),radial-gradient(60% 80% at 50% 45%,rgba(11,42,74,.25),rgba(11,42,74,0) 70%)}
+.page-head--bg .container{width:min(var(--container),100% - var(--gutter)*2)}
+.page-head--bg h1{color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.18)}
+.page-head--bg h1 .mute{color:rgba(255,255,255,.6)}
+.page-head--bg .lead{color:rgba(255,255,255,.86)}
+.page-head--bg .eyebrow{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff;box-shadow:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.page-head--bg .eyebrow a{color:rgba(255,255,255,.72)}
+.page-head--bg .eyebrow a:hover{color:#fff}
+.page-head--bg .eyebrow .sep{background:rgba(255,255,255,.4)}
+.page-head--bg .eyebrow .dot{background:var(--sky);box-shadow:0 0 0 3px rgba(8,172,242,.3)}
+.page-head--bg .btn--ghost{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.page-head--bg .btn--ghost:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.14)}
+@media (max-width:720px){.page-head--bg{min-height:0;padding:96px 0 80px}}
+@media (prefers-reduced-motion:reduce){.page-head__bg img{animation:none}}
