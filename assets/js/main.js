@@ -17,7 +17,7 @@
   addEventListener('keydown', e => { if (e.key === 'Escape' && drawer) { drawer.classList.remove('open'); document.body.style.overflow = ''; } });
 
   /* Reveal on scroll */
-  const io = new IntersectionObserver((ents) => ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+  const io = new IntersectionObserver((ents) => ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0, rootMargin: '0px 0px -8% 0px' });
   $$('.reveal,.reveal-3d,.stat,.fx,.fx-stagger').forEach(el => io.observe(el));
 
   /* Floating particles (particles.js-style) */
@@ -261,7 +261,7 @@
     h.innerHTML = h.innerHTML.split(/(\s+)/).map(t => /^\s+$/.test(t) || !t ? t : `<span class="w"><span>${t}</span></span>`).join('');
     $$('.w>span', h).forEach((s, i) => s.style.transitionDelay = (i * 0.06) + 's');
   });
-  const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: .2 });
+  const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } }), { threshold: 0, rootMargin: '0px 0px -8% 0px' });
   $$('.wr, .wipe').forEach(el => io2.observe(el));
 
   // testimonial slider
