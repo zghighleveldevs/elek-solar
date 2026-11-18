@@ -15,7 +15,7 @@ solar-energy-for-homes.html    Residential Solar
 solar-power-for-businesses.html Commercial Solar
 roofing-services.html          Roofing
 our-solar-locations.html       Locations
-solar-installation-company-in-{florida,georgia,south-carolina}.html
+solar-installation-company-in-{florida,georgia,south-carolina,minnesota}.html
 contact.html
 determine-your-savings.html    Free estimate form
 privacy-policy.html

@@ -655,3 +655,10 @@ h1,h2,h3{overflow-wrap:break-word}
 @media (min-width:1900px){html{zoom:1.22}}
 @media (min-width:2300px){html{zoom:1.4}}
 @media (min-width:3000px){html{zoom:1.8}}
+/* four location cards on the contact page */
+.loc-cards{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1200px){.loc-cards{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.loc-cards{grid-template-columns:1fr}}
+/* alternate photo side on the locations page (photos are wrapped in .wipe) */
+.loc.flip>.wipe{order:2}
+@media (max-width:860px){.loc.flip>.wipe{order:0}}
