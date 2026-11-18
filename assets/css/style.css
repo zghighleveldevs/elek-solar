@@ -662,3 +662,8 @@ h1,h2,h3{overflow-wrap:break-word}
 /* alternate photo side on the locations page (photos are wrapped in .wipe) */
 .loc.flip>.wipe{order:2}
 @media (max-width:860px){.loc.flip>.wipe{order:0}}
+/* lead form: honeypot + send error */
+.hp{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden}
+.form-error{margin:12px 0 0;color:#d93025;font-size:14px;line-height:1.5}
+.form-error a{color:inherit;font-weight:600;text-decoration:underline}
+button[type=submit]:disabled{opacity:.7;cursor:progress}
