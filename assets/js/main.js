@@ -168,6 +168,12 @@
     }
     return ok;
   };
+  /* Remember UTM tags from the landing page so they reach the CRM with the lead */
+  try {
+    const q = new URLSearchParams(location.search), u = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(k => { if (q.get(k)) u[k] = q.get(k); });
+    if (Object.keys(u).length) sessionStorage.setItem('utm', JSON.stringify(u));
+  } catch (_) { }
   $$('form[data-form]').forEach(form => {
     form.setAttribute('novalidate', '');
     form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('invalid'));
@@ -175,8 +181,28 @@
       e.preventDefault();
       if (!validate(form)) { form.querySelector('.invalid input,.invalid select,.invalid textarea')?.focus(); return; }
       const ep = form.dataset.endpoint;
-      if (ep) { try { await fetch(ep, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } }); } catch (_) { } }
-      form.classList.add('sent');
+      if (!ep) { form.classList.add('sent'); return; }
+      if (form.dataset.busy) return;
+      const btn = form.querySelector('button[type=submit]'), label = btn ? btn.innerHTML : '';
+      let err = form.querySelector('.form-error');
+      if (!err) { err = document.createElement('p'); err.className = 'form-error'; err.setAttribute('role', 'alert'); (btn ? btn.closest('.f-actions') || btn.parentNode : form).after(err); }
+      err.textContent = '';
+      form.dataset.busy = '1'; if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      const data = {};
+      new FormData(form).forEach((v, k) => { data[k] = v; });
+      data.sms_consent = !!form.querySelector('input[name=sms_consent]:checked');
+      data.form_name = form.dataset.formName || form.getAttribute('aria-label') || 'Website Form';
+      data.page_url = location.href;
+      try { Object.assign(data, JSON.parse(sessionStorage.getItem('utm') || '{}')); } catch (_) { }
+      try {
+        const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        form.classList.add('sent');
+      } catch (_) {
+        err.innerHTML = 'Sorry, we couldn’t send your request. Please try again or call <a href="tel:8559543535">(855) 954-3535</a>.';
+      } finally {
+        delete form.dataset.busy; if (btn) { btn.disabled = false; btn.innerHTML = label; }
+      }
     });
   });
 
