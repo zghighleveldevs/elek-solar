@@ -724,3 +724,18 @@ button[type=submit]:disabled{opacity:.7;cursor:progress}
 @media (max-width:600px){.checkout{padding:26px 14px}.plan{padding:30px 22px}.plan__price strong{font-size:40px}.billing button{padding:11px 16px}.cmp th,.cmp td{padding:12px 12px}}
 .checkout__frame iframe[hidden]{display:none}
 @media (max-width:600px){.cmp{min-width:0;font-size:13px}.cmp th,.cmp td{padding:11px 6px}.cmp tbody th{padding-left:12px}.cmp thead th{font-size:13.5px;line-height:1.25}.cmp svg{width:16px;height:16px}}
+.cmp td.addon{font-size:14px;color:var(--muted);font-style:italic}
+.section--orphan{background:linear-gradient(135deg,#004b7f,#00335a);color:#d9e8f3}
+.orphan{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.orphan h2{color:#fff;margin:10px 0 16px}
+.orphan .eyebrow{color:#5fd0ff}
+.orphan p{color:#d9e8f3}
+.orphan p strong{color:#fff}
+.orphan__list{list-style:none;padding:0;margin:20px 0 28px;display:grid;gap:10px}
+.orphan__list li{display:flex;gap:10px;align-items:flex-start;color:#fff}
+.orphan__list svg{flex:none;margin-top:3px;color:#5fd0ff}
+.orphan .btn--navy{background:#fff;color:var(--navy);border-color:#fff}
+.orphan .btn--navy:hover{background:#e9f6fd}
+.orphan__img{border-radius:14px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.orphan__img img{display:block;width:100%;height:100%;min-height:380px;object-fit:cover}
+@media (max-width:860px){.orphan{grid-template-columns:1fr;gap:32px}.orphan__img img{min-height:260px}}
