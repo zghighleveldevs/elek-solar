@@ -168,6 +168,38 @@
     }
     return ok;
   };
+
+  /* Solar Care & Watch: billing toggle + on-page checkout */
+  const plansEl = $('.plans[data-period]');
+  if (plansEl) {
+    const frame = $('#co-frame'), empty = $('#co-empty'), alt = $('#co-alt'), link = $('#co-link');
+    let period = 'm', chosen = null;
+    const setPeriod = p => {
+      period = p; plansEl.dataset.period = p;
+      $$('[data-billing]').forEach(b => { const on = b.dataset.billing === p; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+      $$('[data-cobill]').forEach(b => b.classList.toggle('on', b.dataset.cobill === p));
+      if (chosen) load(chosen, false);
+    };
+    const load = (k, scroll) => {
+      const b = $(`[data-choose="${k}"]`); if (!b) return;
+      chosen = k;
+      $$('.plan').forEach(pl => pl.classList.toggle('sel', pl.dataset.plan === k));
+      const url = period === 'y' ? b.dataset.yr : b.dataset.mo;
+      $('#co-title').textContent = 'Sign Up For ' + b.dataset.name;
+      $('#co-sub').textContent = (period === 'y' ? b.dataset.pyr : b.dataset.pmo) + ' plus a one-time $199 activation. Enter your details below to pay securely.';
+      if (frame.getAttribute('src') !== url) frame.src = url;
+      frame.hidden = false; empty.hidden = true; alt.hidden = false; link.href = url;
+      if (scroll) $('#checkout').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    };
+    $$('[data-billing]').forEach(b => b.addEventListener('click', () => setPeriod(b.dataset.billing)));
+    $$('[data-cobill]').forEach(b => b.addEventListener('click', () => setPeriod(b.dataset.cobill)));
+    $$('[data-choose]').forEach(b => b.addEventListener('click', () => load(b.dataset.choose, true)));
+    $$('[data-quick]').forEach(b => b.addEventListener('click', () => load(b.dataset.quick, false)));
+    const pre = new URLSearchParams(location.search);
+    if (pre.get('billing') === 'yearly') setPeriod('y');
+    if (pre.get('plan')) load(pre.get('plan'), false);
+  }
+
   /* Remember UTM tags from the landing page so they reach the CRM with the lead */
   try {
     const q = new URLSearchParams(location.search), u = {};
